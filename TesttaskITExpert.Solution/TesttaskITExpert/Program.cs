@@ -1,6 +1,9 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using TesttaskITExpert.DAL.Extensions;
 
-app.MapGet("/", () => "Hello World!");
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.InjectDALServices(builder.Configuration);
+
+var app = builder.Build();
 
 app.Run();
