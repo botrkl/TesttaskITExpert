@@ -3,7 +3,7 @@ using TesttaskITExpert.DAL.Entities;
 
 namespace TesttaskITExpert.DAL.Repositories.Interfaces
 {
-    public interface IFIlmRepository:IBaseRepository<Film>
+    public interface IFilmRepository:IBaseRepository<Film>
     {
     }
 }
