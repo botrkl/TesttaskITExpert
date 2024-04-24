@@ -10,5 +10,6 @@ namespace TesttaskITExpert.BLL.Services.Interfaces
         public Task DeleteCategoryAsync(int id);
         public Task AddCategoryAsync(AddCategoryModel model);
         public Task UpdateCategoryAsync(UpdateCategoryModel model);
+        public Task<ICollection<CategoryModel>?> GetAllCategories();
     }
 }

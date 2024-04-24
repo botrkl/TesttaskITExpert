@@ -28,6 +28,12 @@ namespace TesttaskITExpert.BLL.Services.Classes
             await _categoryRepository.DeleteAsync(id);
         }
 
+        public async Task<ICollection<CategoryModel>?> GetAllCategories()
+        {
+            var allCategories = await _categoryRepository.GetAllAsync();
+            return _mapper.Map<ICollection<CategoryModel>>(allCategories);
+        }
+
         public async Task<CategoryModel?> GetCategoryByIdAsync(int id)
         {
             var wantedCategory = await _categoryRepository.GetByIdAsync(id);
