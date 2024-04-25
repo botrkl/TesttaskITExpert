@@ -9,6 +9,8 @@ namespace TesttaskITExpert.DAL.EntitiesConfiguration
         public void Configure(EntityTypeBuilder<Film> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
             builder.Property(x=>x.name)
                 .HasMaxLength(200)

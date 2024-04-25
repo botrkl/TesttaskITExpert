@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TesttaskITExpert.DAL.Context;
 
@@ -11,9 +12,11 @@ using TesttaskITExpert.DAL.Context;
 namespace TesttaskITExpert.DAL.Migrations
 {
     [DbContext(typeof(CinematicCatalogDbContext))]
-    partial class CinematicCatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240425021321_Remove_Auxiliary_Property")]
+    partial class Remove_Auxiliary_Property
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

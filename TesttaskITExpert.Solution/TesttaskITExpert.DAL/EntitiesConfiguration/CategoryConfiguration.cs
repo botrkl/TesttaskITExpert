@@ -9,6 +9,14 @@ namespace TesttaskITExpert.DAL.EntitiesConfiguration
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
+            builder
+                .HasOne(x => x.ParentCategory)
+                .WithMany(x => x.SubCategories)
+                .HasForeignKey(x => x.parent_category_id)
+                .HasPrincipalKey(x=>x.Id);
 
             builder.Property(x => x.name)
                 .HasMaxLength(200)
