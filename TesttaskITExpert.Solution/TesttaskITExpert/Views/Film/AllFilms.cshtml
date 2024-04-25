@@ -1,0 +1,102 @@
+﻿@using TesttaskITExpert.BLL.Models;
+@model ICollection<FilmModel>;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Films</title>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .table th, .table td {
+                padding: 8px;
+                border: 1px solid #ddd;
+            }
+
+            .table th {
+                background-color: #f2f2f2;
+            }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 0 4px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #39b54a;
+            border-color: #39b54a;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #d9534f;
+            border-color: #d43f3a;
+        }
+
+        .button-group {
+            display: flex;
+        }
+
+            .button-group form {
+                margin-right: 5px;
+            }
+        </style>
+</head>
+<body>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Назва</th>
+                <th>Режисер</th>
+                <th>Дата виходу</th>
+                <th>Категорії</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var film in Model)
+            {
+                <tr>
+                    <td>@film.name</td>
+                    <td>@film.director</td>
+                    <td>@film.release.ToShortDateString()</td>
+                    <td>@string.Join(", ", film.Categories.Select(c => c.name))</td>
+                    <td>
+                        <div class="button-group">
+                            <form asp-controller="Film" asp-action="EditFilm" method="get">
+                                <input type="hidden" name="filmId" value="@film.Id" />
+                                <button type="submit" class="btn btn-primary">Змінити</button>
+                            </form>
+                            <form asp-controller="Film" asp-action="DeleteFilm" method="post">
+                                <input type="hidden" name="filmId" value="@film.Id" />
+                                <button type="submit" class="btn btn-danger">Видалити</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+</body>
+</html>
