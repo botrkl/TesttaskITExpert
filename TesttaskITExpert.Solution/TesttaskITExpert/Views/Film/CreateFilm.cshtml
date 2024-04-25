@@ -1,13 +1,13 @@
 ﻿@using TesttaskITExpert.BLL.Models.AddModels;
 @using TesttaskITExpert.BLL.Models;
-@model AddCategoryModel;
+@model AddFilmModel;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Add Category</title>
+    <title>Add Film</title>
     <style>
         .form-group {
             margin-bottom: 15px;
@@ -44,23 +44,20 @@
     <div>
         <h1>Add Category</h1>
     </div>
-    <form method="post" asp-controller="Category" asp-action="CreateCategory">
+    <form method="post" asp-controller="Film" asp-action="CreateFilm">
         <div class="form-group">
-            <label asp-for="name">Enter category Name:</label>
+            <label asp-for="name">Enter film Name:</label>
             <input asp-for="name" class="form-control" />
         </div>
-
         <div class="form-group">
-            <label asp-for="parent_category_id">Select Parent Category:</label>
-            <select asp-for="parent_category_id" class="form-control">
-                <option value="">Select Parent Category</option>
-                @foreach (CategoryModel parentCategory in ViewBag.Categories)
-                {
-                    <option value="@parentCategory.Id">@parentCategory.Id - @parentCategory.name</option>
-                }
-            </select>
+            <label asp-for="director">Enter film director:</label>
+            <input asp-for="director" class="form-control" />
+        </div
+        <div class="form-group">
+            <label asp-for="release">Enter film director:</label>
+            <input asp-for="release" class="form-control" />
         </div>
-        <button type="submit" class="btn btn-primary">Add Category</button>
+        <button type="submit" class="btn btn-primary">Add Film</button>
     </form>
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 </body>
