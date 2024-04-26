@@ -5,5 +5,6 @@ namespace TesttaskITExpert.DAL.Repositories.Interfaces
 {
     public interface ICategoryRepository : IBaseRepository<Category>
     {
+        Task<int> GetFilmCountInCategoryAsync(int categoryId);
     }
 }

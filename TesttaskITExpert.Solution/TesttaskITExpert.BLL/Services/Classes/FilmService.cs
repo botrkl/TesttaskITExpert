@@ -28,10 +28,10 @@ namespace TesttaskITExpert.BLL.Services.Classes
             await _filmRepository.DeleteAsync(id);
         }
 
-        public async Task<ICollection<FilmModel>?> GetAllFilms()
+        public async Task<IList<FilmModel>?> GetAllFilms()
         {
             var allFilms = await _filmRepository.GetAllAsync();
-            return _mapper.Map<ICollection<FilmModel>>(allFilms);
+            return _mapper.Map<IList<FilmModel>>(allFilms);
         }
 
         public async Task<FilmModel?> GetFilmModelByIdAsync(int id)

@@ -6,6 +6,6 @@
         public string name { get; set; }
         public string director { get; set; }
         public DateTime release { get; set; }
-        public virtual ICollection<CategoryModel>? Categories { get; set; }
+        public virtual IList<CategoryModel>? Categories { get; set; }
     }
 }

@@ -1,52 +1,29 @@
-﻿@using TesttaskITExpert.BLL.Models;
-@model CategoryModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@model CategoryModel
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>Edit Category</title>
-    <style>
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-            .form-group label {
-                display: block;
-                font-weight: bold;
-            }
-
-            .form-group input {
-                width: 100%;
-                padding: 8px;
-                box-sizing: border-box;
-            }
-
-                .form-group input[type="submit"] {
-                    width: auto;
-                    padding: 8px 20px;
-                }
-    </style>
+    <link rel="stylesheet" href="~/css/edit-category-style.css">
 </head>
 <body>
-    <h2>Edit Category</h2>
-    <form method="post" asp-action="EditCategory" class="edit-category-form">
-        <input type="hidden" name="Id" value="@Model.Id" />
-
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="@Model.name" />
-        </div>
-
-        <div class="form-group">
-            <label for="parent_category_id">Parent Category ID:</label>
-            <input type="number" id="parentCategoryId" name="parent_category_id" value="@Model.parent_category_id" />
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Save Changes" />
-        </div>
-    </form>
+    <div class="container">
+        <h2>Edit Category</h2>
+        <form method="post" asp-action="EditCategory" class="edit-category-form">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="@Model.name" />
+            </div>
+            <div class="form-group">
+                <label for="parentCategoryId">Parent Category ID:</label>
+                <input type="number" id="parentCategoryId" name="parent_category_id" value="@Model.parent_category_id" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save Changes" />
+            </div>
+        </form>
+    </div>
 </body>
 </html>

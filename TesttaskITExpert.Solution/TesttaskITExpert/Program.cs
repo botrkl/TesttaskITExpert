@@ -9,6 +9,7 @@ builder.Services.InjectBLLServices(builder.Configuration);
 var app = builder.Build();
 app.UseRouting();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();

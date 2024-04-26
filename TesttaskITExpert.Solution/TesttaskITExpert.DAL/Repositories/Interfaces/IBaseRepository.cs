@@ -8,6 +8,6 @@ namespace E_Shop.DAL.Repositories.Interfaces
         Task AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
-        Task<IEnumerable<TEntity>?> GetAllAsync();
+        Task<IList<TEntity>?> GetAllAsync();
     }
 }

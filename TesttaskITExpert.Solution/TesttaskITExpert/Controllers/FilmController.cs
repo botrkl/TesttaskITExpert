@@ -8,9 +8,11 @@ namespace TesttaskITExpert.Controllers
     public class FilmController : Controller
     {
         private readonly IFilmService _filmService;
-        public FilmController(IFilmService filmService)
+        private readonly ICategoryService _categoryService;
+        public FilmController(IFilmService filmService, ICategoryService categoryService)
         {
             _filmService = filmService;
+            _categoryService = categoryService;
         }
         [Route("/film/add")]
         [HttpGet]
@@ -28,9 +30,24 @@ namespace TesttaskITExpert.Controllers
 
         [Route("/film/all")]
         [HttpGet]
-        public async Task<IActionResult> AllFilms()
+        public async Task<IActionResult> AllFilms(string? category,string? director)
         {
             var filmList = await _filmService.GetAllFilms();
+            ViewBag.Categories = await _categoryService.GetAllCategories();
+            var c  = await _filmService.GetAllFilms();
+            ViewBag.Directors = c?.DistinctBy(x => x.director).ToList();
+            if (category != null)
+            {
+                int categoryId;
+                if (int.TryParse(category, out categoryId))
+                {
+                    filmList = filmList?.Where(film => film.Categories.Any(cat => cat.Id == categoryId)).ToList();
+                }
+            }
+            if(director != null)
+            {
+                filmList = filmList?.Where(x => x.director == director).ToList();
+            }
             return View(filmList);
         }
         [Route("/film/delete")]

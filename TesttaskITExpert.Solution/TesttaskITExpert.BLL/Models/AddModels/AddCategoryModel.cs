@@ -6,4 +6,3 @@
         public int? parent_category_id { get; set; }
     }
 }
-

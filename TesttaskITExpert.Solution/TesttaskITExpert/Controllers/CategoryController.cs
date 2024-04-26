@@ -2,6 +2,7 @@
 using TesttaskITExpert.BLL.Models.AddModels;
 using TesttaskITExpert.BLL.Models.UpdateModels;
 using TesttaskITExpert.BLL.Services.Interfaces;
+using TesttaskITExpert.DAL.Entities;
 
 namespace TesttaskITExpert.Controllers
 {
@@ -46,7 +47,7 @@ namespace TesttaskITExpert.Controllers
         [HttpGet]
         public async Task<IActionResult> EditCategory(int? categoryId)
         {
-            if(categoryId == null)
+            if (categoryId == null)
             {
                 return RedirectToAction("AllCategories");
             }
@@ -59,6 +60,14 @@ namespace TesttaskITExpert.Controllers
         {
             await _categoryService.UpdateCategoryAsync(categoryModel);
             return RedirectToAction("AllCategories");
+        }
+
+        [Route("/category/all/info")]
+        [HttpGet]
+        public async Task<IActionResult> InfoCategories()
+        {
+           var categoriesWithInfo = await _categoryService.GetCategoriesWithInfoAsync();
+            return View(categoriesWithInfo);
         }
     }
 }

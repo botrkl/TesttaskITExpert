@@ -1,67 +1,33 @@
-﻿@using TesttaskITExpert.BLL.Models.AddModels;
-@using TesttaskITExpert.BLL.Models;
-@model AddCategoryModel;
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@model AddCategoryModel
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>Add Category</title>
-    <style>
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        .input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .btn {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-            .btn:hover {
-                background-color: #0056b3;
-            }
-
-    </style>
+    <link rel="stylesheet" href="~/css/create-category-style.css">
 </head>
 <body>
-    <div>
+    <div class="container">
         <h1>Add Category</h1>
+        <form method="post" asp-controller="Category" asp-action="CreateCategory">
+            <div class="form-group">
+                <label asp-for="name">Enter Category Name:</label>
+                <input asp-for="name" class="input" />
+            </div>
+            <div class="form-group">
+                <label asp-for="parent_category_id">Select Parent Category:</label>
+                <select asp-for="parent_category_id" class="input">
+                    <option value="">Select Parent Category</option>
+                    @foreach (CategoryModel parentCategory in ViewBag.Categories)
+                    {
+                        <option value="@parentCategory.Id">@parentCategory.Id - @parentCategory.name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Category</button>
+        </form>
     </div>
-    <form method="post" asp-controller="Category" asp-action="CreateCategory">
-        <div class="form-group">
-            <label asp-for="name">Enter category Name:</label>
-            <input asp-for="name" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="parent_category_id">Select Parent Category:</label>
-            <select asp-for="parent_category_id" class="form-control">
-                <option value="">Select Parent Category</option>
-                @foreach (CategoryModel parentCategory in ViewBag.Categories)
-                {
-                    <option value="@parentCategory.Id">@parentCategory.Id - @parentCategory.name</option>
-                }
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Category</button>
-    </form>
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 </body>
 </html>

@@ -11,6 +11,6 @@ namespace TesttaskITExpert.BLL.Services.Interfaces
         public Task DeleteFilmAsync(int id);
         public Task AddFilmAsync(AddFilmModel model);
         public Task UpdateFilmAsync(UpdateFilmModel model);
-        public Task<ICollection<FilmModel>?> GetAllFilms();
+        public Task<IList<FilmModel>?> GetAllFilms();
     }
 }
