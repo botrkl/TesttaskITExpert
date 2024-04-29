@@ -16,8 +16,8 @@ namespace TesttaskITExpert.DAL.Repositories.Classes
         public async Task<int> GetFilmCountInCategoryAsync(int categoryId)
         {
             return await _dbContext.FilmCategories
-              .Where(x => x.category_id == categoryId)
-              .CountAsync();
+                .Where(x => x.category_id == categoryId)
+                .CountAsync();
         }
     }
 }   

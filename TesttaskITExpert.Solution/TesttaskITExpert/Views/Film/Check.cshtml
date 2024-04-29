@@ -1,0 +1,100 @@
+﻿@model FilmModel;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Film Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .category-rectangle {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            color: #333;
+        }</style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">@Model.name</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Director:</strong> @Model.director</p>
+                <p class="card-text"><strong>Release Date:</strong> @Model.release.ToShortDateString()</p>
+                <p class="card-text"><strong>Categories:</strong></p>
+                <div  id="add-categories">
+                    @foreach (var c in Model.Categories)
+                    {
+                        <a class="category-rectangle">@c.name</a>
+                    }
+                </div>
+
+
+                <button id="add-category-button" class="btn btn-primary">+</button>
+                <button id="submit-button" class="btn btn-success">Submit</button>
+                <div id="selected-categories">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var counter = false;
+
+        document.getElementById('add-category-button').addEventListener('click', function () {
+            var categories = @Html.Raw(Json.Serialize(ViewBag.Categories));
+            var selectedCategoriesContainer = document.getElementById('selected-categories');
+
+            if (counter == false) {
+                categories.forEach(function (category) {
+                    var categoryButton = document.createElement('button');
+                    categoryButton.className = 'category-rectangle btn btn-secondary newCategoryId';
+                    categoryButton.textContent = category.name;
+                    categoryButton.setAttribute('id', category.id);
+                    selectedCategoriesContainer.appendChild(categoryButton);
+
+                    categoryButton.addEventListener('click', function () {
+                        document.getElementById('add-categories').appendChild(categoryButton);
+                    });
+                });
+                counter = true;
+            }
+            else {
+                document.getElementById("selected-categories").innerHTML = "";
+                counter = false;
+            }
+        });
+
+        document.getElementById('add-categories').addEventListener('click', function (event) {
+            if (event.target.classList.contains('category-rectangle')) {
+                var categoryButton = event.target;
+                document.getElementById('selected-categories').appendChild(categoryButton);
+            }
+        });
+
+        document.getElementById('submit-button').addEventListener('click', function (event) {
+            var parentElement = document.getElementById('add-categories');
+
+            var childElements = parentElement.querySelectorAll('.newCategoryId');
+
+            var ids = [];
+
+            childElements.forEach(function (element) {
+                ids.push(element.id);
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/film/AddCategoryToFilm/@Model.Id', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+           
+            xhr.send(JSON.stringify(ids));
+        });
+    </script>
+</body>
+</html>

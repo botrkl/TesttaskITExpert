@@ -26,11 +26,11 @@
                         <td>@category.parent_category_id</td>
                         <td>
                             <div class="btn-container">
-                                <form asp-controller="Category" asp-action="EditCategory" method="get">
+                                <form asp-controller="Category" asp-action="Edit" method="get">
                                     <input type="hidden" name="categoryId" value="@category.Id" />
                                     <button type="submit" class="btn btn-primary">Edit</button>
                                 </form>
-                                <form asp-controller="Category" asp-action="DeleteCategory" method="post">
+                                <form asp-controller="Category" asp-action="Delete" method="post">
                                     <input type="hidden" name="categoryId" value="@category.Id" />
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>

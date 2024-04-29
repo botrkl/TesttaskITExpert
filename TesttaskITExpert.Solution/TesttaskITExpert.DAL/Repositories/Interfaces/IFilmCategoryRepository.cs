@@ -5,5 +5,6 @@ namespace TesttaskITExpert.DAL.Repositories.Interfaces
 {
     public interface IFilmCategoryRepository : IBaseRepository<FilmCategory>
     {
+        public Task<List<Category>?> GetCategoriesByFilmIdAsync(int filmId);
     }
 }

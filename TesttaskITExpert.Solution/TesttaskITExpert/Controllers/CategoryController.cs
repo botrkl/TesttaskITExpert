@@ -2,10 +2,10 @@
 using TesttaskITExpert.BLL.Models.AddModels;
 using TesttaskITExpert.BLL.Models.UpdateModels;
 using TesttaskITExpert.BLL.Services.Interfaces;
-using TesttaskITExpert.DAL.Entities;
 
 namespace TesttaskITExpert.Controllers
 {
+    [Route("[controller]")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -13,58 +13,63 @@ namespace TesttaskITExpert.Controllers
         {
             _categoryService = categoryService;
         }
-        [Route("/category/add")]
+
+        [Route("[action]")]
         [HttpGet]
-        public async Task<IActionResult> CreateCategory()
+        public async Task<IActionResult> Add()
         {
             var categories = await _categoryService.GetAllCategories();
             ViewBag.Categories = categories;
             return View();
         }
 
-        [Route("/category/add")]
+        [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromForm] AddCategoryModel addCategoryModel)
+        public async Task<IActionResult> Add([FromForm] AddCategoryModel addCategoryModel)
         {
             await _categoryService.AddCategoryAsync(addCategoryModel);
-            return RedirectToAction("CreateCategory");
+            return RedirectToAction("Add");
         }
-        [Route("/category/all")]
+
+        [Route("[action]")]
         [HttpGet]
-        public async Task<IActionResult> AllCategories()
+        public async Task<IActionResult> All()
         {
             var categoryList = await _categoryService.GetAllCategories();
             return View(categoryList);
         }
-        [Route("/category/delete")]
+
+        [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> DeleteCategory([FromForm] int categoryId)
+        public async Task<IActionResult> Delete([FromForm] int categoryId)
         {
             await _categoryService.DeleteCategoryAsync(categoryId);
-            return RedirectToAction("AllCategories");
+            return RedirectToAction("All");
         }
-        [Route("/category/edit")]
+
+        [Route("[action]")]
         [HttpGet]
-        public async Task<IActionResult> EditCategory(int? categoryId)
+        public async Task<IActionResult> Edit(int? categoryId)
         {
             if (categoryId == null)
             {
-                return RedirectToAction("AllCategories");
+                return RedirectToAction("All");
             }
             var categoryModel = await _categoryService.GetCategoryByIdAsync(categoryId.Value);
             return View(categoryModel);
         }
-        [Route("/category/edit")]
+
+        [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> EditCategory([FromForm] UpdateCategoryModel categoryModel)
+        public async Task<IActionResult> Edit([FromForm] UpdateCategoryModel categoryModel)
         {
             await _categoryService.UpdateCategoryAsync(categoryModel);
-            return RedirectToAction("AllCategories");
+            return RedirectToAction("All");
         }
 
-        [Route("/category/all/info")]
+        [Route("[action]")]
         [HttpGet]
-        public async Task<IActionResult> InfoCategories()
+        public async Task<IActionResult> Info()
         {
            var categoriesWithInfo = await _categoryService.GetCategoriesWithInfoAsync();
             return View(categoriesWithInfo);

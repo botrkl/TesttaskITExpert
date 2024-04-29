@@ -11,17 +11,17 @@
     <div class="container">
         <div class="btn-container">
             <button id="sortButton" onclick="toggleSort()">Sort by Release Date</button>
-            <form asp-controller="Film" asp-action="AllFilms" method="get">
+            <form asp-controller="Film" asp-action="All" method="get">
                 <select name="director">
                     <option value="">Select Director</option>
-                    @foreach (FilmModel film in ViewBag.Directors)
+                    @foreach (var director in ViewBag.Directors)
                     {
-                        <option value="@film.director">@film.director</option>
+                        <option value="@director">@director</option>
                     }
                 </select>
                 <select name="category">
                     <option value="">Select Category</option>
-                    @foreach (CategoryModel category in ViewBag.Categories)
+                    @foreach (var category in ViewBag.Categories)
                     {
                         <option value="@category.Id">@category.name</option>
                     }
@@ -43,17 +43,17 @@
                 @foreach (var film in Model)
                 {
                     <tr>
-                        <td>@film.name</td>
+                        <td><a href="~/film/check/@film.Id">@film.name</a></td>
                         <td>@film.director</td>
                         <td>@film.release.ToShortDateString()</td>
                         <td>@string.Join(", ", film.Categories.Select(c => c.name))</td>
                         <td>
                             <div class="button-group">
-                                <form asp-controller="Film" asp-action="EditFilm" method="get">
+                                <form asp-controller="Film" asp-action="Edit" method="get">
                                     <input type="hidden" name="filmId" value="@film.Id" />
                                     <button type="submit" class="btn btn-primary">Edit</button>
                                 </form>
-                                <form asp-controller="Film" asp-action="DeleteFilm" method="post">
+                                <form asp-controller="Film" asp-action="Delete" method="post">
                                     <input type="hidden" name="filmId" value="@film.Id" />
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>

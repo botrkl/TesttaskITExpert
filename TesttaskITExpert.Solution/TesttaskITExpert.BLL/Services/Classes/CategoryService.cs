@@ -57,18 +57,14 @@ namespace TesttaskITExpert.BLL.Services.Classes
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category == null)
             {
-                // Категория с указанным идентификатором не найдена
-                return -1; // Или другое значение, указывающее на ошибку
+                return -1;
             }
-
             int level = 0;
             while (category.ParentCategory != null)
             {
-                // Переходим к родительской категории и увеличиваем уровень вложенности
                 category = category.ParentCategory;
                 level++;
             }
-
             return level;
         }
         public async Task<IList<CategoryViewModel>> GetCategoriesWithInfoAsync()
@@ -78,24 +74,16 @@ namespace TesttaskITExpert.BLL.Services.Classes
 
             foreach (var category in categories)
             {
-                // Получение количества фильмов в текущей категории
                 int filmCount = await _categoryRepository.GetFilmCountInCategoryAsync(category.Id);
-
-                // Получение уровня вложенности текущей категории
                 int nestedLevel = await GetNestedLevelAsync(category.Id);
-
-                // Создание объекта CategoryViewModel с информацией о категории
                 CategoryViewModel categoryInfo = new CategoryViewModel
                 {
                     Name = category.name,
                     FilmCount = filmCount,
                     NestedLevel = nestedLevel
                 };
-
-                // Добавление объекта CategoryViewModel в список
                 categoriesWithInfo.Add(categoryInfo);
             }
-
             return categoriesWithInfo;
         }
 
