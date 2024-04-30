@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="~/css/edit-film-style.css">
 </head>
 <body>
+    @{
+        await Html.RenderPartialAsync("_NavigationBar");
+    }
     <div class="container">
         <h2>Edit Film</h2>
         <form method="post" asp-action="EditFilm" class="edit-film-form">
@@ -28,6 +31,12 @@
                 <input type="submit" value="Save Changes" />
             </div>
         </form>
+        @if (!string.IsNullOrEmpty(ViewBag.Errors))
+        {
+            <div class="alert alert-danger" role="alert">
+                @Html.Raw(ViewBag.Errors)
+            </div>
+        }
     </div>
 </body>
 </html>

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TesttaskITExpert.BLL.Models;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TesttaskITExpert.BLL.Models.AddModels;
 using TesttaskITExpert.BLL.Models.UpdateModels;
 using TesttaskITExpert.BLL.Services.Interfaces;
-using TesttaskITExpert.DAL.Entities;
+using TesttaskITExpert.DTOs.Add;
 
 namespace TesttaskITExpert.Controllers
 {
@@ -12,10 +12,13 @@ namespace TesttaskITExpert.Controllers
     {
         private readonly IFilmService _filmService;
         private readonly ICategoryService _categoryService;
-        public FilmController(IFilmService filmService, ICategoryService categoryService)
+        private readonly IMapper _mapper;
+
+        public FilmController(IFilmService filmService, ICategoryService categoryService, IMapper mapper)
         {
             _filmService = filmService;
             _categoryService = categoryService;
+            _mapper = mapper;
         }
 
         [Route("[action]")]
@@ -27,24 +30,34 @@ namespace TesttaskITExpert.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> Add([FromForm] AddFilmModel addFilmModel)
+        public async Task<IActionResult> Add([FromForm] AddFilm addFilm)
         {
-            await _filmService.AddFilmAsync(addFilmModel);
-            return RedirectToAction("All");
+            if (!ModelState.IsValid)
+            {
+                string errors = string.Join("\n", ModelState.Values.SelectMany(value => value.Errors).Select(err => err.ErrorMessage));
+                ViewBag.Errors = errors;
+                return View();
+            }
+            else
+            {
+                var addFilmModel = _mapper.Map<AddFilmModel>(addFilm);
+                await _filmService.AddFilmAsync(addFilmModel);
+                return RedirectToAction("All");
+            } 
         }
 
         [Route("[action]")]
         [HttpGet]
         public async Task<IActionResult> All(string? category, string? director)
         {
-            var filmList = await _filmService.GetAllFilms();
-            for(int i=0;i<filmList.Count();i++)
+            var filmList = await _filmService.GetAllFilmsAsync();
+            for (int i = 0; i < filmList.Count(); i++)
             {
-                filmList[i] = await _filmService.GetFilmByIdWithCategoriesAsync(filmList[i].Id);
-                
+                filmList[i] = await _filmService.GetFilmWithCategoriesByFilmIdAsync(filmList[i].Id);
+
             }
-            var categories = await _categoryService.GetAllCategories();
-            ViewBag.Categories = categories.Select(x=>new {Id = x.Id, name = x.name });
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            ViewBag.Categories = categories.Select(x => new { Id = x.Id, name = x.name });
 
             if (!string.IsNullOrEmpty(category) && int.TryParse(category, out int categoryId))
             {
@@ -77,41 +90,50 @@ namespace TesttaskITExpert.Controllers
             {
                 return RedirectToAction("All");
             }
-            var filModel = await _filmService.GetFilmModelByIdAsync(filmId.Value);
+            var filModel = await _filmService.GetFilmByIdAsync(filmId.Value);
             return View(filModel);
         }
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> Edit([FromForm] UpdateFilmModel filmModel)
+        public async Task<IActionResult> Edit([FromForm] UpdateFilmModel updateFilm)
         {
-            await _filmService.UpdateFilmAsync(filmModel);
-            return RedirectToAction("All");
+            if (!ModelState.IsValid)
+            {
+                string errors = string.Join("\n", ModelState.Values.SelectMany(value => value.Errors).Select(err => err.ErrorMessage));
+                ViewBag.Errors = errors;
+                var filmModel = await _filmService.GetFilmByIdAsync(updateFilm.Id);
+                return View(filmModel);
+            }
+            else
+            {
+                var updateFilmModel = _mapper.Map<UpdateFilmModel>(updateFilm);
+                await _filmService.UpdateFilmAsync(updateFilmModel);
+                return RedirectToAction("All");
+            }
         }
 
         [Route("[action]/{filmId:int}")]
         [HttpGet]
-        public async Task<IActionResult> Check(int? filmId)
+        public async Task<IActionResult> Info(int? filmId)
         {
-            if(filmId == null)
+            if (filmId == null)
             {
                 return RedirectToAction("All");
             }
-            //var filmModel = await _filmService.GetFilmModelByIdAsync(filmId.Value);
-            var filmModel = await _filmService.GetFilmByIdWithCategoriesAsync(filmId.Value);
-            var categories = await _categoryService.GetAllCategories();
+            var filmModel = await _filmService.GetFilmWithCategoriesByFilmIdAsync(filmId.Value);
+            var allCategories = await _categoryService.GetAllCategoriesAsync();
+            var categories = allCategories?.Where(c => filmModel.Categories.All(fc => fc.Id != c.Id)).ToList();
             ViewBag.Categories = categories;
             return View(filmModel);
         }
 
         [Route("[action]/{filmId:int}")]
         [HttpPost]
-        public async Task<IActionResult> AddCategoryToFilm(int filmId,[FromBody] IList<int> categoryList)
+        public async Task<IActionResult> AddCategoryToFilm(int filmId, [FromBody] IList<int>? categoryList)
         {
-            await _filmService.AddCategoryToFilmAsync(filmId, categoryList);
-            FilmModel c= await _filmService.GetFilmByIdWithCategoriesAsync(filmId);
-
-            return RedirectToAction("Check", new { filmId = filmId });
+            await _filmService.AddCategoriesToFilmAsync(filmId, categoryList);
+            return RedirectToAction("All");
         }
     }
 }

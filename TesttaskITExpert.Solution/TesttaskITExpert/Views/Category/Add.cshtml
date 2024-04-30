@@ -5,9 +5,12 @@
 <head>
     <meta charset="utf-8" />
     <title>Add Category</title>
-    <link rel="stylesheet" href="~/css/create-category-style.css">
+    <link rel="stylesheet" href="~/css/add-category-style.css">
 </head>
 <body>
+    @{
+        await Html.RenderPartialAsync("_NavigationBar");
+    }
     <div class="container">
         <h1>Add Category</h1>
         <form method="post" asp-controller="Category" asp-action="Add">
@@ -27,6 +30,12 @@
             </div>
             <button type="submit" class="btn btn-primary">Add Category</button>
         </form>
+        @if (!string.IsNullOrEmpty(ViewBag.Errors))
+        {
+            <div class="alert alert-danger" role="alert">
+                @Html.Raw(ViewBag.Errors)
+            </div>
+        }
     </div>
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 </body>

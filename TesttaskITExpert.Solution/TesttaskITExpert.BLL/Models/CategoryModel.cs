@@ -6,6 +6,5 @@
         public string name { get; set; }
         public int? parent_category_id { get; set; }
         public virtual CategoryModel? ParentCategory { get; set; }
-        public IList<FilmModel>? Films { get; set; }
     }
 }

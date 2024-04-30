@@ -29,7 +29,7 @@ label {
     margin-bottom: 5px;
 }
 
-.input {
+input[type="text"], input[type="date"] {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -37,15 +37,29 @@ label {
     box-sizing: border-box;
 }
 
-.btn {
+input[type="submit"] {
+    width: auto;
+    padding: 8px 20px;
     background-color: #007bff;
     color: #fff;
-    padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-    .btn:hover {
+    input[type="submit"]:hover {
         background-color: #0056b3;
     }
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}

@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="~/css/all-films-style.css">
 </head>
 <body>
+    @{
+        await Html.RenderPartialAsync("_NavigationBar");
+    }
     <div class="container">
         <div class="btn-container">
             <button id="sortButton" onclick="toggleSort()">Sort by Release Date</button>
@@ -43,7 +46,7 @@
                 @foreach (var film in Model)
                 {
                     <tr>
-                        <td><a href="~/film/check/@film.Id">@film.name</a></td>
+                        <td><a href="~/film/info/@film.Id">@film.name</a></td>
                         <td>@film.director</td>
                         <td>@film.release.ToShortDateString()</td>
                         <td>@string.Join(", ", film.Categories.Select(c => c.name))</td>

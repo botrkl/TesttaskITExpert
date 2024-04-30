@@ -5,9 +5,12 @@
 <head>
     <meta charset="utf-8" />
     <title>Add Film</title>
-    <link rel="stylesheet" href="~/css/create-film-style.css">
+    <link rel="stylesheet" href="~/css/add-film-style.css">
 </head>
 <body>
+    @{
+        await Html.RenderPartialAsync("_NavigationBar");
+    }
     <div class="container">
         <h1>Add Film</h1>
         <form method="post" asp-controller="Film" asp-action="Add">
@@ -25,6 +28,12 @@
             </div>
             <button type="submit" class="btn btn-primary">Add Film</button>
         </form>
+        @if (!string.IsNullOrEmpty(ViewBag.Errors))
+        {
+            <div class="alert alert-danger" role="alert">
+                @Html.Raw(ViewBag.Errors)
+            </div>
+        }
     </div>
     <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 </body>

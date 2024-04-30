@@ -1,0 +1,15 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TesttaskITExpert.DTOs.Update
+{
+    public class UpdateFilm
+    {
+        public int Id { get; set; }
+        [Required(ErrorMessage = "Name is required.")]
+        public string name { get; set; }
+        [Required(ErrorMessage = "Director is required.")]
+        public string director { get; set; }
+        [Required(ErrorMessage = "Release Date is required.")]
+        public DateTime release { get; set; }
+    }
+}

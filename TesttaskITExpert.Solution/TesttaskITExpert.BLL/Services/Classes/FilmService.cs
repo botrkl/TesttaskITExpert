@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using TesttaskITExpert.BLL.Models;
 using TesttaskITExpert.BLL.Models.AddModels;
 using TesttaskITExpert.BLL.Models.UpdateModels;
 using TesttaskITExpert.BLL.Services.Interfaces;
 using TesttaskITExpert.DAL.Entities;
-using TesttaskITExpert.DAL.Repositories.Classes;
 using TesttaskITExpert.DAL.Repositories.Interfaces;
 
 namespace TesttaskITExpert.BLL.Services.Classes
@@ -21,8 +19,14 @@ namespace TesttaskITExpert.BLL.Services.Classes
             _filmRepository = filmRepository;
             _filmCategoryRepository = filmCategoryRepository;
         }
-        public async Task AddCategoryToFilmAsync(int filmId, IList<int> categoryIds)
+        public async Task AddCategoriesToFilmAsync(int filmId, IList<int>? categoryIds)
         {
+            var filmCategoryList = await _filmCategoryRepository.GetAllAsync();
+            var filmCategoryIdList = filmCategoryList?.Where(x => x.film_id == filmId).Select(x => x.Id);
+            foreach (var item in filmCategoryIdList)
+            {
+                await _filmCategoryRepository.DeleteAsync(item);
+            }
             foreach (var category in categoryIds)
             {
                 var filmCategory = new FilmCategory() { film_id = filmId, category_id = category };
@@ -41,21 +45,21 @@ namespace TesttaskITExpert.BLL.Services.Classes
             await _filmRepository.DeleteAsync(id);
         }
 
-        public async Task<IList<FilmModel>?> GetAllFilms()
+        public async Task<IList<FilmModel>?> GetAllFilmsAsync()
         {
             var allFilms = await _filmRepository.GetAllAsync();
             return _mapper.Map<IList<FilmModel>>(allFilms);
         }
 
-        public async Task<FilmModel> GetFilmByIdWithCategoriesAsync(int filmId)//rename
+        public async Task<FilmModel> GetFilmWithCategoriesByFilmIdAsync(int filmId)
         {
             var categories = await _filmCategoryRepository.GetCategoriesByFilmIdAsync(filmId);
-            var filmModel = await this.GetFilmModelByIdAsync(filmId);
+            var filmModel = await this.GetFilmByIdAsync(filmId);
             filmModel.Categories = _mapper.Map<List<CategoryModel>>(categories);
             return filmModel;
         }
 
-        public async Task<FilmModel?> GetFilmModelByIdAsync(int id)
+        public async Task<FilmModel?> GetFilmByIdAsync(int id)
         {
             var wantedFilm = await _filmRepository.GetByIdAsync(id);
             return _mapper.Map<FilmModel>(wantedFilm);
@@ -67,6 +71,5 @@ namespace TesttaskITExpert.BLL.Services.Classes
             _mapper.Map(model, tempFilm);
             await _filmRepository.UpdateAsync(tempFilm);
         }
-
     }
 }

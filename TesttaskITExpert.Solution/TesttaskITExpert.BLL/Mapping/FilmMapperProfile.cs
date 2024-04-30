@@ -26,14 +26,12 @@ namespace TesttaskITExpert.BLL.Mapping
                 .ForMember(dest => dest.name, opt => opt.MapFrom(src => src.name))
                 .ForMember(dest => dest.director, opt => opt.MapFrom(src => src.director))
                 .ForMember(dest => dest.release, opt => opt.MapFrom(src => src.release));
-               /* .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.FilmCategories))*/
 
             CreateMap<FilmModel, Film>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.name, opt => opt.MapFrom(src => src.name))
                 .ForMember(dest => dest.director, opt => opt.MapFrom(src => src.director))
                 .ForMember(dest => dest.release, opt => opt.MapFrom(src => src.release));
-                //.ForMember(dest => dest.FilmCategories, opt => opt.MapFrom(src => src.Categories));
         }   
     }
 }

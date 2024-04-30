@@ -1,0 +1,44 @@
+﻿@model FilmModel;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Film Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/info-film.css">
+</head>
+<body>
+    @{
+        await Html.RenderPartialAsync("_NavigationBar");
+    }
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">@Model.name</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Director:</strong> @Model.director</p>
+                <p class="card-text"><strong>Release Date:</strong> @Model.release.ToShortDateString()</p>
+                <p class="card-text"><strong>Categories:</strong></p>
+                <div  id="selected-categories">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <a class="category-rectangle" id="@category.Id">@category.name</a>
+                    }
+                </div>
+                <div class="categories">
+                    Add Categories: 
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <a class="category-rectangle" id="@category.Id">@category.name</a>
+                    }
+                </div>
+                <button id="submit-button" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </div>
+    <script src="~/js/classes/CategoryManager.js"></script>
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+</body>
+</html>

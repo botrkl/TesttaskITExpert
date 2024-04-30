@@ -4,7 +4,6 @@ using TesttaskITExpert.BLL.Models.AddModels;
 using TesttaskITExpert.BLL.Models.UpdateModels;
 using TesttaskITExpert.BLL.Services.Interfaces;
 using TesttaskITExpert.DAL.Entities;
-using TesttaskITExpert.DAL.Repositories.Classes;
 using TesttaskITExpert.DAL.Repositories.Interfaces;
 
 namespace TesttaskITExpert.BLL.Services.Classes
@@ -23,13 +22,13 @@ namespace TesttaskITExpert.BLL.Services.Classes
             var addCategory = _mapper.Map<Category>(model);
             await _categoryRepository.AddAsync(addCategory);
         }
-
+       
         public async Task DeleteCategoryAsync(int id)
         {
             await _categoryRepository.DeleteAsync(id);
         }
 
-        public async Task<IList<CategoryModel>?> GetAllCategories()
+        public async Task<IList<CategoryModel>?> GetAllCategoriesAsync()
         {
             var allCategories = await _categoryRepository.GetAllAsync();
             return  _mapper.Map<IList<CategoryModel>>(allCategories);
@@ -49,9 +48,20 @@ namespace TesttaskITExpert.BLL.Services.Classes
         public async Task UpdateCategoryAsync(UpdateCategoryModel model)
         {
             var tempCategory = await _categoryRepository.GetByIdAsync(model.Id);
+
+            if (model.parent_category_id.HasValue)
+            {
+                var parentCategory = await _categoryRepository.GetByIdAsync(model.parent_category_id.Value);
+                if (parentCategory != null && IsAncestor(parentCategory, model.Id))
+                {
+                    throw new Exception("Looping categories!");
+                }
+            }
+
             _mapper.Map(model, tempCategory);
             await _categoryRepository.UpdateAsync(tempCategory);
         }
+
         public async Task<int> GetNestedLevelAsync(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
@@ -67,7 +77,8 @@ namespace TesttaskITExpert.BLL.Services.Classes
             }
             return level;
         }
-        public async Task<IList<CategoryViewModel>> GetCategoriesWithInfoAsync()
+
+        public async Task<IList<CategoryViewModel>> GetCategoriesInfoAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
             List<CategoryViewModel> categoriesWithInfo = new List<CategoryViewModel>();
@@ -87,5 +98,21 @@ namespace TesttaskITExpert.BLL.Services.Classes
             return categoriesWithInfo;
         }
 
+        private bool IsAncestor(Category category, int Id)
+        {
+            if (category == null)
+            {
+                return false;
+            }
+            else if (category.Id == Id)
+            {
+                return true;
+            }
+            else if (category.ParentCategory != null)
+            {
+                return IsAncestor(category.ParentCategory, Id);
+            }
+            return false;
+        }
     }
 }
