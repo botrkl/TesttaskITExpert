@@ -45,7 +45,7 @@ namespace TesttaskITExpert.Controllers
                 return RedirectToAction("All");
             } 
         }
-
+        [Route("/")]
         [Route("[action]")]
         [HttpGet]
         public async Task<IActionResult> All(string? category, string? director)
